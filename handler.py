@@ -6,13 +6,6 @@ import imutils
 import cv2
 
 
-def show_images(images):
-    for i, img in enumerate(images):
-        cv2.imshow("image_" + str(i), img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-
 def handle_image(
         img_path="images/rm.png",
         gaussian_accuracy: int = 25,
@@ -33,8 +26,6 @@ def handle_image(
     edged = cv2.dilate(edged, None, iterations=1)
     edged = cv2.erode(edged, None, iterations=1)
 
-    # show_images([blur, edged])
-
     # Поиск контуров
     cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = imutils.grab_contours(cnts)
@@ -48,7 +39,6 @@ def handle_image(
     if show_border:
         cv2.drawContours(image, cnts, -1, (0, 255, 0), 3)
 
-    # show_images([image, edged])
     amount = (len(cnts))
 
     # Разрешение фото
@@ -83,5 +73,3 @@ def handle_image(
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)
 
     return image, amount
-
-# show_images([image])
