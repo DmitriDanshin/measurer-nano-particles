@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
@@ -27,20 +29,25 @@ def read_image(
         show_border: bool = False,
         show_contours: bool = True,
         particles_size_nm: int = 200,
-        gaussian_accuracy: int = 25,
-        blur_accuracy: int = 60,
+        gaussian_accuracy: int = 9,
+        lower_threshold: int = 50,
+        upper_threshold: int = 100,
         size_accuracy: int = 19,
+        canny: bool = False,
         file: UploadFile = File(...)):
     with open("image.png", "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     image, amount = handle_image("image.png",
                                  gaussian_accuracy,
-                                 blur_accuracy,
+                                 lower_threshold,
+                                 upper_threshold,
                                  size_accuracy,
                                  particles_size_nm,
                                  show_border,
                                  show_size,
-                                 show_contours
+                                 show_contours,
+                                 canny
                                  )
     cv2.imwrite("image.png", image)
+    cv2.imwrite(f"images/image{amount}-{datetime.date.today()}.png", image)
     return FileResponse("image.png", media_type="image/jpeg", filename=f"{amount}.jpg")

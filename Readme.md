@@ -1,0 +1,1 @@
+Рекомендуется использовать отношение upper_threshold:lower_threshold между 2:1 и 3:1.
