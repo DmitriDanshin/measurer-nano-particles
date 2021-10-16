@@ -1,12 +1,10 @@
 import datetime
-
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
+import base64
 
 import cv2
-
-from starlette.responses import FileResponse
 
 from handler import handle_image
 
@@ -35,19 +33,29 @@ def read_image(
         size_accuracy: int = 19,
         canny: bool = False,
         file: UploadFile = File(...)):
+    # чтение изображение
     with open("image.png", "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-    image, amount = handle_image("image.png",
-                                 gaussian_accuracy,
-                                 lower_threshold,
-                                 upper_threshold,
-                                 size_accuracy,
-                                 particles_size_nm,
-                                 show_border,
-                                 show_size,
-                                 show_contours,
-                                 canny
-                                 )
+
+    # обработка изображения
+    (image, amount, max_size,
+     min_size, sizes) = handle_image("image.png",
+                                     gaussian_accuracy, lower_threshold, upper_threshold,
+                                     size_accuracy, particles_size_nm, show_border,
+                                     show_size, show_contours, canny)
+    # сохранение изображение
     cv2.imwrite("image.png", image)
+
+    # сохранение изображения в историю
     cv2.imwrite(f"images/image{amount}-{datetime.date.today()}.png", image)
-    return FileResponse("image.png", media_type="image/jpeg", filename=f"{amount}.jpg")
+
+    with open("image.png", "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+
+    return {
+        "amount": amount,
+        "maxSize": max_size,
+        "minSize": min_size,
+        "sizes": sizes,
+        "image": encoded_string
+    }

@@ -1,3 +1,5 @@
+import math
+
 from scipy.spatial.distance import euclidean
 from imutils import perspective
 from imutils import contours as cnts
@@ -17,7 +19,7 @@ def handle_image(
         show_size: bool = True,
         show_contours: bool = False,
         canny: bool = False,
-):
+) -> (tuple[any, int, int, int, list[int]], tuple[any, int]):
     # Чтение фотографии
     image = cv2.imread(img_path)
 
@@ -52,7 +54,9 @@ def handle_image(
     (tl, tr, br, bl) = box
     dist_in_pixel = euclidean(tl, tr)
     dist_in_nm = particles_size_nm
-    pixel_per_cm = dist_in_pixel / dist_in_nm
+    pixel_per_nm = dist_in_pixel / dist_in_nm
+
+    sizes = []
 
     # Рисование квадратов и надписей
     for cnt in contours:
@@ -66,13 +70,21 @@ def handle_image(
 
         mid_pt_horizontal = (tl[0] + int(abs(tr[0] - tl[0]) / 2), tl[1] + int(abs(tr[1] - tl[1]) / 2))
         mid_pt_vertical = (tr[0] + int(abs(tr[0] - br[0]) / 2), tr[1] + int(abs(tr[1] - br[1]) / 2))
-        wid = euclidean(tl, tr) / pixel_per_cm
-        ht = euclidean(tr, br) / pixel_per_cm
+        wid = euclidean(tl, tr) / pixel_per_nm
+        ht = euclidean(tr, br) / pixel_per_nm
+
+        sizes.append(math.floor(math.sqrt(wid ** 2 + ht ** 2)))
+
         if show_size:
             cv2.putText(image, "{:.1f}nm".format(wid), (int(mid_pt_horizontal[0] - 15), int(mid_pt_horizontal[1] - 10)),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (155, 255, 0), 2)
             cv2.putText(image, "{:.1f}nm".format(ht), (int(mid_pt_vertical[0] + 10), int(mid_pt_vertical[1])),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (155, 255, 0), 2)
+
+    max_particle_size = max(sizes)
+    min_particle_size = min(sizes)
+    sizes.sort()
+
     if canny:
-        return edged, amount
-    return image, amount
+        image = edged
+    return image, amount, max_particle_size, min_particle_size, sizes
