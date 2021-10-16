@@ -19,7 +19,7 @@ def handle_image(
         show_size: bool = True,
         show_contours: bool = False,
         canny: bool = False,
-) -> (tuple[any, int, int, int, list[int]], tuple[any, int]):
+):
     # Чтение фотографии
     image = cv2.imread(img_path)
 
