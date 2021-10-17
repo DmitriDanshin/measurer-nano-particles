@@ -1,90 +1,79 @@
 <template>
-
-  <div>
-    <input type="checkbox" id="show_size">
-    <input type="checkbox" id="show_border">
-    <input type="checkbox" id="show_contours">
-    <label for="gaussian_accuracy">Гауссово</label>
-    <input v-model="number" type="range" min="3" max="25" id="gaussian_accuracy" step="2">
-    <label for="gaussian_accuracy">{{number}}</label>
-    <input type="number" id="lower_threshold">
-    <input type="number" id="upper_threshold">
-    <input type="number" id="size_accuracy">
-    <input type="checkbox" id="canny">
+  <div class="container">
+    <img src="" alt="" ref="img" />
   </div>
-
-
-  <img :src="src" alt="">
-  <div>{{ amount?.slice(0, -4) }}</div>
-
-  <div class="hello">
-    <input @change="getimage" type="file" id="input">
+  <div class="footer">
+    <div class="hello">
+      <input @change="getImage" type="file" id="input" />
+    </div>
+    <div v-if="amount">Фотография :{{ amount?.slice(0, -4) }}</div>
+    
   </div>
-  <button @click="getImage">sss</button>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   data() {
     return {
       image: null,
       amount: "",
-      file: '',
-      src: '',
-      number: 3
-
-    }
+    };
   },
   methods: {
-    async aaa(formData) {
-      let result = await fetch('http://fastapi.space/?show_size=true&show_border=false&show_contours=true&particles_size_nm=250&gaussian_accuracy=19&blur_accuracy=60&size_accuracy=19', {
+    getImage(e) {
+
+      const image = this.$refs.img;
+      const file = e.target.files[0];
+      const formData = new FormData();
+
+      formData.append('file', file);
+      fetch('http://fastapi.space/', {
         method: "POST",
         body: formData
-      });
-      result = await result.json();
-      return "data:image/png;base64, " + result.image ;
-    },
-
-    async getImage() {
-      let file = this.file;
-      this.amount = file.name;
-
-      const formData = new FormData();
-      formData.append('file', file);
-      this.src = await this.aaa(formData);
-    },
-    getimage(e) {
-      this.file = e.target.files[0];
-      this.src = URL.createObjectURL(this.file);
+      }).then((response) => {
+        return response.json()
+      }).then(response => {
+        image.src = "data:image/png;base64, " + response.image;
+        console.log(response)
+      })
     }
-  }
-}
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-img {
-  border: 5px solid black;
-  max-height: 750px;
-  width: auto;
+<style lang="scss" scoped>
+
+.container{ 
+  grid-column: 2;
+  grid-row: 1/3;
+  border: 1px solid rgb(2, 2, 2);
+  text-align: center;
+ 
+  
+  
+  img {
+    grid-row: 1 / 3;
+    grid-column: 2 / 3;
+    border: 5px solid rgb(11, 68, 77) ;
+    width: 99%;
+    height: 99%;
+        
+    
+  }
+}
+.footer {
+  margin: 20px;
+  grid-column: 2;
+  grid-row: 3/4;
 }
 
-h3 {
-  margin: 40px 0 0;
-}
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
 
-a {
-  color: #42b983;
-}
+
+
+
+
 </style>
