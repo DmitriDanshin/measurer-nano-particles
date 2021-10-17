@@ -32,6 +32,7 @@ def read_image(
         upper_threshold: int = 100,
         size_accuracy: int = 19,
         canny: bool = False,
+        handle: bool = True,
         file: UploadFile = File(...)):
     # чтение изображение
     with open("image.png", "wb") as buffer:
@@ -39,15 +40,14 @@ def read_image(
 
     # обработка изображения
     (image, amount, max_size,
-     min_size, sizes) = handle_image("image.png",
-                                     gaussian_accuracy, lower_threshold, upper_threshold,
-                                     size_accuracy, particles_size_nm, show_border,
-                                     show_size, show_contours, canny)
+     min_size, sizes,
+     mean, median) = handle_image("image.png",
+                                  gaussian_accuracy, lower_threshold, upper_threshold,
+                                  size_accuracy, particles_size_nm, show_border,
+                                  show_size, show_contours, canny, handle)
+
     # сохранение изображение
     cv2.imwrite("image.png", image)
-
-    # сохранение изображения в историю
-    cv2.imwrite(f"images/image{amount}-{datetime.date.today()}.png", image)
 
     with open("image.png", "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
@@ -57,5 +57,7 @@ def read_image(
         "maxSize": max_size,
         "minSize": min_size,
         "sizes": sizes,
+        "mean": mean,
+        "median": median,
         "image": encoded_string
     }
