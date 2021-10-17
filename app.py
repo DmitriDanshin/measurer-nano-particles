@@ -1,4 +1,3 @@
-import datetime
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
@@ -7,6 +6,7 @@ import base64
 import cv2
 
 from handler import handle_image
+from schemes import ImageData
 
 app = FastAPI()
 
@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 
-@app.post("/")
+@app.post("/", response_model=ImageData)
 def read_image(
         show_size: bool = True,
         show_border: bool = False,
@@ -41,23 +41,18 @@ def read_image(
     # обработка изображения
     (image, amount, max_size,
      min_size, sizes,
-     mean, median) = handle_image("image.png",
-                                  gaussian_accuracy, lower_threshold, upper_threshold,
-                                  size_accuracy, particles_size_nm, show_border,
-                                  show_size, show_contours, canny, handle)
+     mean, median, mode) = handle_image("image.png",
+                                        gaussian_accuracy, lower_threshold, upper_threshold,
+                                        size_accuracy, particles_size_nm, show_border,
+                                        show_size, show_contours, canny, handle)
 
     # сохранение изображение
     cv2.imwrite("image.png", image)
 
     with open("image.png", "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read())
+        image = base64.b64encode(image_file.read())
 
-    return {
-        "amount": amount,
-        "maxSize": max_size,
-        "minSize": min_size,
-        "sizes": sizes,
-        "mean": mean,
-        "median": median,
-        "image": encoded_string
-    }
+    return ImageData(amount=amount, image=image,
+                     maxSize=max_size, minSize=min_size,
+                     sizes=sizes, mean=mean,
+                     median=median, mode=mode)
