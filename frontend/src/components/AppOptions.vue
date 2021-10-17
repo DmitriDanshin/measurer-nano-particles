@@ -2,41 +2,53 @@
   <div class="options">
     <h1>Параметры</h1>
     <div class="options__menu">
-      <div>
-        <label for="showSize">Показать размер:</label>
-        <input type="checkbox" id="showSize" />
+      <div class="options__menu-checkbox">
+        <div>
+          <label class="options__menu-checkbox-item" for="showSize"
+            >Показать размер:</label
+          >
+          <input type="checkbox" id="showSize" />
+        </div>
+        <div>
+          <label class="options__menu-checkbox-item" for="showBorder"
+            >Показать границу:</label
+          >
+          <input type="checkbox" id="showBorder" />
+        </div>
+        <div>
+          <label class="options__menu-checkbox-item" for="showСontours"
+            >Показать контуры:</label
+          >
+          <input type="checkbox" id="showСontours" />
+        </div>
+        <div>
+          <label class="options__menu-checkbox-item" for="OperatorCanny"
+            >Оператор Кэнни:</label
+          >
+          <input type="checkbox" id="OperatorCanny" placeholder="19" />
+        </div>
       </div>
-      <div>
-        <label for="showBorder">Показать границу:</label>
-        <input type="checkbox" id="showBorder" />
-      </div>
-      <div>
-        <label for="showСontours">Показать контуры:</label>
-        <input type="checkbox" id="showСontours" />
-      </div>
-      <div>
-        <label for="particlesSizeNm">Размер частицы(нм):</label>
-        <input type="input" id="particlesSizeNm" placeholder="200" />
-      </div>
-      <div>
-        <label for="gaussianAccuracy">Точность фильтра Гаусса:</label>
-        <input type="input" id="gaussianAccuracy" placeholder="9" />
-      </div>
-      <div>
-        <label for="lowerThreshold">Нижняя граница оператора Кэнни:</label>
-        <input type="input" id="lowerThreshold" placeholder="50" />
-      </div>
-      <div>
-        <label for="upperThreshold">Верхняя граница оператора Кэнни:</label>
-        <input type="input" id="upperThreshold" placeholder="100" />
-      </div>
-      <div>
-        <label for="sizeAccuracy">Точность размеров:</label>
-        <input type="input" id="sizeAccuracy" placeholder="19" />
-      </div>
-      <div>
-        <label for="OperatorCanny">Оператор Кэнни:</label>
-        <input type="checkbox" id="OperatorCanny" placeholder="19" />
+      <div class="options__menu-range">
+        <div>
+          <label for="particlesSizeNm">Размер частицы(нм):</label>
+          <input type="range" id="particlesSizeNm" placeholder="200" />
+        </div>
+        <div>
+          <label for="gaussianAccuracy">Точность фильтра Гаусса:</label>
+          <input type="range" id="gaussianAccuracy" placeholder="9" />
+        </div>
+        <div>
+          <label for="lowerThreshold">Нижняя граница оператора Кэнни:</label>
+          <input type="range" id="lowerThreshold" placeholder="50" />
+        </div>
+        <div>
+          <label for="upperThreshold">Верхняя граница оператора Кэнни:</label>
+          <input type="range" id="upperThreshold" placeholder="100" />
+        </div>
+        <div>
+          <label for="sizeAccuracy">Масштаб:</label>
+          <input type="imput" id="sizeAccuracy" placeholder="19" />
+        </div>
       </div>
     </div>
   </div>
@@ -54,29 +66,55 @@ export default {
   grid-column: 1;
   grid-row: 1 / 3;
   width: 450px;
-  border: 1px solid rgb(2, 2, 2);
+  border: 5px solid rgb(2, 2, 2);
+  background: #f5f5dc;
   &__menu {
     display: grid;
     justify-content: center;
-    gap: 25px;
-    label {
-      font-size: 15px;
-      font-family: "Heebo", sans-serif;
-      font-style: normal;
-      line-height: 10px;
-      align-items: center;
-      text-align: center;
-      justify-content: center;
+    grid-template-rows: repeat(2, minmax(100px, auto));
+
+    &-checkbox {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(100px, 170px));
+      grid-template-rows: repeat(4, minmax(50px, auto));
+      grid-row: 1;
+      div {
+        display: flex;
+        grid-column: 1;
+        justify-content: space-between;
+      }
+      &-item {
+        font-size: 16px;
+        font-family: "Heebo", sans-serif;
+        font-style: normal;
+        line-height: 10px;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+      }
     }
+    &-range {
+      
+      div {
+        margin-top: 20px;
+        display: flex;
+        grid-column: 1;
+        justify-content: space-between;
+      }
+      label {
+        font-size: 16px;
+        font-family: "Heebo", sans-serif;
+        font-style: normal;
+        line-height: 10px;
+      }
+    }
+
     input {
       border-radius: 12px;
       margin-left: 10px;
       align-items: center;
       text-align: center;
       border: 2px solid rgb(36, 35, 35);
-    }
-    input:checked {
-      border: 2px solid red;
     }
   }
   h1 {
@@ -96,10 +134,10 @@ export default {
   font-size: 26px;
   grid-row: 3;
   justify-content: center;
-  border: 1px solid green;
+  border: 5px solid rgb(0, 0, 0);
+  border-top: 0px;
   align-items: center;
-  background-image: url('../assets/brawl.jpg');
+  background-image: url("../assets/brawl.jpg");
   background-size: cover;
-  
 }
 </style>
