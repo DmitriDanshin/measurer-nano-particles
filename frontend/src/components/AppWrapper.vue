@@ -1,17 +1,24 @@
 <template>
   <div class="container">
-    <img :src="src" alt=""/>
+    <img
+        :src="src"
+        alt=""
+    />
   </div>
   <div class="footer">
     <label class="footer__btn">
       <input
-          class="footer__btn-inputfile"
-          @change="handleFileChange"
-          type="file"
           id="input"
+          class="footer__btn-inputfile"
+          type="file"
+          @change="handleFileChange"
       />
       <p class="footer__btn-title">Добавить фотографию</p>
-      <img class="footer__btn-icon" src="../assets/fileinput.png" alt=""/>
+      <img
+          class="footer__btn-icon"
+          src="../assets/fileinput.png"
+          alt=""
+      />
     </label>
     <!-- <div class="footer__name">
       Вы используете фотографию :{{ amount?.slice(0, -4) }}
@@ -43,7 +50,11 @@ export default {
     },
     async process(request) {
       let url = new URL('http://fastapi.space/');
-      for (const option in request.options) url.searchParams.set(option, request.options[option]);
+
+      for (const option in request.options) {
+        url.searchParams.set(option.replace(/[A-Z]/,
+            match => `_${match.toLowerCase()}`), request.options[option]);
+      }
 
       let result = await fetch(url, {
         method: "POST",
@@ -100,7 +111,7 @@ export default {
   grid-column: 2;
   grid-row: 3/4;
   border: 5px solid #000000;
-  border-top: 0px;
+  border-top: 0;
   padding: 10px;
   border-right: 5px solid rgb(0, 0, 0);
   border-left: 5px solid rgb(0, 0, 0);
