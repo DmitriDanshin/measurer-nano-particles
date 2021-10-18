@@ -4,104 +4,106 @@
     <div class="options__menu">
       <div class="options__menu-checkbox">
         <div>
-          <label class="options__menu-checkbox-item" for="showSize"
-            >Показать размер:</label
-          >
+          <label
+              class="options__menu-checkbox-item"
+              for="show_size"
+          >Показать размер:</label>
           <input
-            @change="emit"
-            v-model="options.show_size"
-            type="checkbox"
-            id="showSize"
+              id="show_size"
+              v-model="options.showSize"
+              type="checkbox"
+              @change="emit"
           />
         </div>
         <div>
-          <label class="options__menu-checkbox-item" for="showBorder"
-            >Показать границу:</label
-          >
+          <label
+              class="options__menu-checkbox-item"
+              for="show_border"
+          >Показать границу:</label>
           <input
-            @change="emit"
-            v-model="options.show_border"
-            type="checkbox"
-            id="showBorder"
+              id="show_border"
+              v-model="options.showBorder"
+              type="checkbox"
+              @change="emit"
           />
         </div>
         <div>
-          <label class="options__menu-checkbox-item" for="showСontours"
-            >Показать контуры:</label
-          >
+          <label
+              class="options__menu-checkbox-item"
+              for="show_contours"
+          >Показать контуры:</label>
           <input
-            @change="emit"
-            v-model="options.show_contours"
-            type="checkbox"
-            id="showСontours"
+              id="show_contours"
+              v-model="options.showContours"
+              type="checkbox"
+              @change="emit"
           />
         </div>
         <div>
-          <label class="options__menu-checkbox-item" for="OperatorCanny"
-            >Оператор Кэнни:</label
-          >
+          <label
+              class="options__menu-checkbox-item"
+              for="canny"
+          >Оператор Кэнни:</label>
           <input
-            @change="emit"
-            v-model="options.canny"
-            type="checkbox"
-            id="OperatorCanny"
-            placeholder="19"
+              id="canny"
+              v-model="options.canny"
+              type="checkbox"
+              placeholder="19"
+              @change="emit"
           />
         </div>
       </div>
       <div class="options__menu-numeric">
         <div>
-          <label for="particlesSizeNm">Размер частицы (нм):</label>
+          <label for="particles_size">Размер частицы (нм):</label>
           <input
-            @change="emit"
-            v-model="options.particles_size_nm"
-            type="number"
-            id="particlesSizeNm"
+              id="particles_size"
+              v-model="options.particlesSize"
+              type="number"
+              @change="emit"
           />
         </div>
         <div>
-          <label for="lowerThreshold">Нижняя граница оператора Кэнни:</label>
+          <label for="lower_threshold">Нижняя граница оператора Кэнни:</label>
           <input
-            @change="emit"
-            v-model="options.lower_threshold"
-            type="number"
-            id="lowerThreshold"
+              id="lower_threshold"
+              v-model="options.lowerThreshold"
+              type="number"
+              @change="emit"
           />
         </div>
         <div>
-          <label for="upperThreshold">Верхняя граница оператора Кэнни:</label>
+          <label for="upper_threshold">Верхняя граница оператора Кэнни:</label>
           <input
-            @change="emit"
-            v-model="options.upper_threshold"
-            type="number"
-            id="upperThreshold"
+              id="upper_threshold"
+              v-model="options.upperThreshold"
+              type="number"
+              @change="emit"
           />
         </div>
         <div>
-          <label for="sizeAccuracy">Масштаб:</label>
+          <label for="size_accuracy">Масштаб:</label>
           <input
-            @change="emit"
-            v-model="options.size_accuracy"
-            type="number"
-            id="sizeAccuracy"
+              id="size_accuracy"
+              v-model="options.sizeAccuracy"
+              type="number"
+              @change="emit"
           />
         </div>
         <div>
           <label for="gaussianAccuracy">Точность фильтра Гаусса:</label>
-          <label class="options__menu-numeric-value" for="gaussianAccuracy"
-            >Значение: {{ options.gaussian_accuracy }}</label
-          >
+          <label for="gaussianAccuracy">{{ options.gaussianAccuracy }}</label>
           <input
-            class="options__menu-numeric-range"
-            @change="emit"
-            v-model="options.gaussian_accuracy"
-            type="range"
-            id="gaussianAccuracy"
-            min="3"
-            max="25"
-            step="2"
+              id="gaussianAccuracy"
+              v-model="options.gaussianAccuracy"
+              class="options__menu-numeric-range"
+              type="range"
+              min="3"
+              max="25"
+              step="2"
+              @change="emit"
           />
-          
+
         </div>
       </div>
     </div>
@@ -115,14 +117,14 @@ export default {
   data() {
     return {
       options: {
-        show_size: true,
-        show_border: false,
-        show_contours: true,
-        particles_size_nm: 200,
-        gaussian_accuracy: 9,
-        lower_threshold: 50,
-        upper_threshold: 100,
-        size_accuracy: 19,
+        showSize: true,
+        showBorder: false,
+        showContours: true,
+        particlesSize: 200,
+        gaussianAccuracy: 9,
+        lowerThreshold: 50,
+        upperThreshold: 100,
+        sizeAccuracy: 19,
         canny: false,
       },
     };
@@ -173,11 +175,7 @@ export default {
     }
 
     &-numeric {
-      &-value {
-        position: absolute;
-        left: 316px;
-        margin-top: 70px;
-      }
+
       &-range {
         -webkit-appearance: none;
         grid-column: 2/3;
@@ -185,7 +183,7 @@ export default {
         height: 16px;
         border: 2px solid rgb(36, 35, 35);
         background-color: rgb(255, 255, 255);
-        
+
         &::-webkit-slider-thumb {
           appearance: none;
           width: 16px;
@@ -194,6 +192,7 @@ export default {
           border-radius: 50%;
           cursor: pointer;
         }
+
         &::after {
           content: "25";
           position: absolute;
@@ -202,16 +201,18 @@ export default {
           font-size: 14px;
           font-weight: bold;
         }
+
         &::before {
           content: "0";
           position: absolute;
           margin-top: 38px;
-          
+
           font-size: 14px;
           font-weight: bold;
         }
 
       }
+
       div {
         margin-top: 20px;
         display: flex;
@@ -256,7 +257,7 @@ export default {
   grid-row: 3;
   justify-content: center;
   border: 5px solid rgb(0, 0, 0);
-  border-top: 0px;
+  border-top: 0;
   align-items: center;
   background-image: url("../assets/brawl.jpg");
   background-size: cover;
