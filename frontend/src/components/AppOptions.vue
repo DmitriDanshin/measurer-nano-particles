@@ -7,7 +7,9 @@
           <label
               class="options__menu-checkbox-item"
               for="show_size"
-          >Показать размер:</label>
+          >
+            Показать размер:
+          </label>
           <input
               id="show_size"
               v-model="options.showSize"
@@ -19,7 +21,9 @@
           <label
               class="options__menu-checkbox-item"
               for="show_border"
-          >Показать границу:</label>
+          >
+            Показать границу:
+          </label>
           <input
               id="show_border"
               v-model="options.showBorder"
@@ -31,7 +35,9 @@
           <label
               class="options__menu-checkbox-item"
               for="show_contours"
-          >Показать контуры:</label>
+          >
+            Показать контуры:
+          </label>
           <input
               id="show_contours"
               v-model="options.showContours"
@@ -43,7 +49,9 @@
           <label
               class="options__menu-checkbox-item"
               for="canny"
-          >Оператор Кэнни:</label>
+          >
+            Оператор Кэнни:
+          </label>
           <input
               id="canny"
               v-model="options.canny"
@@ -91,10 +99,10 @@
           />
         </div>
         <div>
-          <label for="gaussianAccuracy">Точность фильтра Гаусса:</label>
-          <label for="gaussianAccuracy">{{ options.gaussianAccuracy }}</label>
+          <label for="gaussian_accuracy">Точность фильтра Гаусса:</label>
+          <label for="gaussian_accuracy">{{ options.gaussianAccuracy }}</label>
           <input
-              id="gaussianAccuracy"
+              id="gaussian_accuracy"
               v-model="options.gaussianAccuracy"
               class="options__menu-numeric-range"
               type="range"
