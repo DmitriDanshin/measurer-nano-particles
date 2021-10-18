@@ -41,9 +41,12 @@ def get_statistics(sizes):
     mean = math.ceil(mean * 100) / 100
 
     median = statistics.median(sizes)
+    mode = statistics.mode(sizes)
+
     sizes.sort()
 
-    return max_particle_size, min_particle_size, mean, median, sizes
+    return (max_particle_size, min_particle_size,
+            mean, median, sizes, mode)
 
 
 def handle_image(
@@ -110,10 +113,11 @@ def handle_image(
             cv2.putText(image, "{:.1f}nm".format(ht), (int(mid_pt_vertical[0] + 10), int(mid_pt_vertical[1])),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (155, 255, 0), 2)
 
-    max_particle_size, min_particle_size, mean, median, sizes = get_statistics(sizes)
+    (max_particle_size, min_particle_size,
+     mean, median, sizes, mode) = get_statistics(sizes)
 
     if canny:
         image = edged
     return (image, amount,
             max_particle_size, min_particle_size,
-            sizes, mean, median)
+            sizes, mean, median, mode)
