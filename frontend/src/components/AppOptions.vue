@@ -5,51 +5,103 @@
       <div class="options__menu-checkbox">
         <div>
           <label class="options__menu-checkbox-item" for="showSize"
-          >Показать размер:</label
+            >Показать размер:</label
           >
-          <input @change="emit" v-model="options.show_size" type="checkbox" id="showSize"/>
+          <input
+            @change="emit"
+            v-model="options.show_size"
+            type="checkbox"
+            id="showSize"
+          />
         </div>
         <div>
           <label class="options__menu-checkbox-item" for="showBorder"
-          >Показать границу:</label
+            >Показать границу:</label
           >
-          <input @change="emit" v-model="options.show_border" type="checkbox" id="showBorder"/>
+          <input
+            @change="emit"
+            v-model="options.show_border"
+            type="checkbox"
+            id="showBorder"
+          />
         </div>
         <div>
           <label class="options__menu-checkbox-item" for="showСontours"
-          >Показать контуры:</label
+            >Показать контуры:</label
           >
-          <input @change="emit" v-model="options.show_contours" type="checkbox" id="showСontours"/>
+          <input
+            @change="emit"
+            v-model="options.show_contours"
+            type="checkbox"
+            id="showСontours"
+          />
         </div>
         <div>
           <label class="options__menu-checkbox-item" for="OperatorCanny"
-          >Оператор Кэнни:</label
+            >Оператор Кэнни:</label
           >
-          <input @change="emit" v-model="options.canny" type="checkbox" id="OperatorCanny" placeholder="19"/>
+          <input
+            @change="emit"
+            v-model="options.canny"
+            type="checkbox"
+            id="OperatorCanny"
+            placeholder="19"
+          />
         </div>
       </div>
       <div class="options__menu-numeric">
         <div>
-          <label for="particlesSizeNm">Размер частицы(нм):</label>
-          <input @change="emit" v-model="options.particles_size_nm" type="number" id="particlesSizeNm"/>
-        </div>
-        <div>
-          <label for="gaussianAccuracy">Точность фильтра Гаусса:</label>
-          <label for="gaussianAccuracy">{{ options.gaussian_accuracy }}</label>
-          <input @change="emit" v-model="options.gaussian_accuracy" type="range" id="gaussianAccuracy" min="3" max="25"
-                 step="2"/>
+          <label for="particlesSizeNm">Размер частицы (нм):</label>
+          <input
+            @change="emit"
+            v-model="options.particles_size_nm"
+            type="number"
+            id="particlesSizeNm"
+          />
         </div>
         <div>
           <label for="lowerThreshold">Нижняя граница оператора Кэнни:</label>
-          <input @change="emit" v-model="options.lower_threshold" type="number" id="lowerThreshold"/>
+          <input
+            @change="emit"
+            v-model="options.lower_threshold"
+            type="number"
+            id="lowerThreshold"
+          />
         </div>
         <div>
           <label for="upperThreshold">Верхняя граница оператора Кэнни:</label>
-          <input @change="emit" v-model="options.upper_threshold" type="number" id="upperThreshold"/>
+          <input
+            @change="emit"
+            v-model="options.upper_threshold"
+            type="number"
+            id="upperThreshold"
+          />
         </div>
         <div>
           <label for="sizeAccuracy">Масштаб:</label>
-          <input @change="emit" v-model="options.size_accuracy" type="number" id="sizeAccuracy"/>
+          <input
+            @change="emit"
+            v-model="options.size_accuracy"
+            type="number"
+            id="sizeAccuracy"
+          />
+        </div>
+        <div>
+          <label for="gaussianAccuracy">Точность фильтра Гаусса:</label>
+          <label class="options__menu-numeric-value" for="gaussianAccuracy"
+            >Значение: {{ options.gaussian_accuracy }}</label
+          >
+          <input
+            class="options__menu-numeric-range"
+            @change="emit"
+            v-model="options.gaussian_accuracy"
+            type="range"
+            id="gaussianAccuracy"
+            min="3"
+            max="25"
+            step="2"
+          />
+          
         </div>
       </div>
     </div>
@@ -71,16 +123,16 @@ export default {
         lower_threshold: 50,
         upper_threshold: 100,
         size_accuracy: 19,
-        canny: false
+        canny: false,
       },
-    }
+    };
   },
   methods: {
     emit() {
-      this.$emit('optionChanged', this.options);
-    }
+      this.$emit("optionChanged", this.options);
+    },
   },
-  emits: ['optionChanged']
+  emits: ["optionChanged"],
 };
 </script>
 
@@ -121,7 +173,45 @@ export default {
     }
 
     &-numeric {
+      &-value {
+        position: absolute;
+        left: 316px;
+        margin-top: 70px;
+      }
+      &-range {
+        -webkit-appearance: none;
+        grid-column: 2/3;
+        min-width: 160px;
+        height: 16px;
+        border: 2px solid rgb(36, 35, 35);
+        background-color: rgb(255, 255, 255);
+        
+        &::-webkit-slider-thumb {
+          appearance: none;
+          width: 16px;
+          height: 17px;
+          background: #3b3939;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+        &::after {
+          content: "25";
+          position: absolute;
+          margin-top: 38px;
+          left: 430px;
+          font-size: 14px;
+          font-weight: bold;
+        }
+        &::before {
+          content: "0";
+          position: absolute;
+          margin-top: 38px;
+          
+          font-size: 14px;
+          font-weight: bold;
+        }
 
+      }
       div {
         margin-top: 20px;
         display: flex;
