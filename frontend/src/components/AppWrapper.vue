@@ -1,53 +1,79 @@
 <template>
   <div class="container">
-    <img src="" alt="" ref="img" />
+    <img :src="src" alt=""/>
   </div>
   <div class="footer">
     <label class="footer__btn">
       <input
-        class="footer__btn-inputfile"
-        @change="getImage"
-        type="file"
-        id="input"
+          class="footer__btn-inputfile"
+          @change="handleFileChange"
+          type="file"
+          id="input"
       />
       <p class="footer__btn-title">Добавить фотографию</p>
-      <img class="footer__btn-icon" src="../assets/fileinput.png" alt="" />
+      <img class="footer__btn-icon" src="../assets/fileinput.png" alt=""/>
     </label>
     <!-- <div class="footer__name">
       Вы используете фотографию :{{ amount?.slice(0, -4) }}
     </div> -->
   </div>
+  <app-options @optionChanged="handleOptionsChange"/>
+  <app-information :info="info"/>
 </template>
 
 <script>
+import AppOptions from "./AppOptions";
+import AppInformation from "./AppInformation";
+
 export default {
-  name: "HelloWorld",
+  name: "AppWrapper",
+  components: {AppOptions, AppInformation},
   data() {
     return {
-      image: null,
-      amount: "",
-    };
+      file: '',
+      src: require('../assets/placeholder.png'),
+      options: {},
+      info: {}
+    }
   },
   methods: {
-    getImage(e) {
-      const image = this.$refs.img;
-      const file = e.target.files[0];
-      const formData = new FormData();
-
-      formData.append("file", file);
-      fetch("http://fastapi.space/", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((response) => {
-          image.src = "data:image/png;base64, " + response.image;
-          console.log(response);
-        });
+    handleOptionsChange(newOptions) {
+      this.options = newOptions;
+      if (this.file) this.getData();
     },
-  },
+    async process(request) {
+      let url = new URL('http://fastapi.space/');
+      for (const option in request.options) url.searchParams.set(option, request.options[option]);
+
+      let result = await fetch(url, {
+        method: "POST",
+        body: request.formData
+      });
+      result = await result.json();
+      return result;
+    },
+    handleFileChange(e) {
+      this.file = e.target.files[0];
+      this.src = URL.createObjectURL(this.file);
+      this.getData();
+    },
+    async getData() {
+      const formData = new FormData();
+      formData.append('file', this.file);
+      let options = this.options;
+      let request = {formData, options};
+      let result = await this.process(request);
+      this.src = "data:image/png;base64, " + result.image;
+      this.info = {
+        amount: result.amount,
+        maxSize: result.maxSize,
+        minSize: result.minSize,
+        sizes: result.sizes,
+        mean: result.mean,
+        median: result.median
+      }
+    }
+  }
 };
 </script>
 
@@ -66,6 +92,7 @@ export default {
     height: 100%;
   }
 }
+
 .footer {
   display: flex;
   align-items: center;
@@ -84,6 +111,7 @@ export default {
     color: #f5f5dc;
     margin-top: 40px;
   }
+
   &__btn {
     margin-top: 20px;
 
@@ -98,20 +126,24 @@ export default {
     border: 3px solid rgb(0, 0, 0);
     padding: 5px;
     transition: 0.8s;
+
     &:hover {
       color: #fff;
       transition: 0.8s;
       background-color: #a8a89a;
     }
+
     &-inputfile {
       display: none;
     }
+
     &-title {
       display: flex;
       font-size: 14px;
       font-family: "Heebo", sans-serif;
       align-items: center;
     }
+
     &-icon {
       width: 24px;
       height: 24px;

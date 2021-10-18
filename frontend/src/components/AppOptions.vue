@@ -5,49 +5,51 @@
       <div class="options__menu-checkbox">
         <div>
           <label class="options__menu-checkbox-item" for="showSize"
-            >Показать размер:</label
+          >Показать размер:</label
           >
-          <input type="checkbox" id="showSize" />
+          <input @change="emit" v-model="options.show_size" type="checkbox" id="showSize"/>
         </div>
         <div>
           <label class="options__menu-checkbox-item" for="showBorder"
-            >Показать границу:</label
+          >Показать границу:</label
           >
-          <input type="checkbox" id="showBorder" />
+          <input @change="emit" v-model="options.show_border" type="checkbox" id="showBorder"/>
         </div>
         <div>
           <label class="options__menu-checkbox-item" for="showСontours"
-            >Показать контуры:</label
+          >Показать контуры:</label
           >
-          <input type="checkbox" id="showСontours" />
+          <input @change="emit" v-model="options.show_contours" type="checkbox" id="showСontours"/>
         </div>
         <div>
           <label class="options__menu-checkbox-item" for="OperatorCanny"
-            >Оператор Кэнни:</label
+          >Оператор Кэнни:</label
           >
-          <input type="checkbox" id="OperatorCanny" placeholder="19" />
+          <input @change="emit" v-model="options.canny" type="checkbox" id="OperatorCanny" placeholder="19"/>
         </div>
       </div>
-      <div class="options__menu-range">
+      <div class="options__menu-numeric">
         <div>
           <label for="particlesSizeNm">Размер частицы(нм):</label>
-          <input type="range" id="particlesSizeNm" placeholder="200" />
+          <input @change="emit" v-model="options.particles_size_nm" type="number" id="particlesSizeNm"/>
         </div>
         <div>
           <label for="gaussianAccuracy">Точность фильтра Гаусса:</label>
-          <input type="range" id="gaussianAccuracy" placeholder="9" />
+          <label for="gaussianAccuracy">{{ options.gaussian_accuracy }}</label>
+          <input @change="emit" v-model="options.gaussian_accuracy" type="range" id="gaussianAccuracy" min="3" max="25"
+                 step="2"/>
         </div>
         <div>
           <label for="lowerThreshold">Нижняя граница оператора Кэнни:</label>
-          <input type="range" id="lowerThreshold" placeholder="50" />
+          <input @change="emit" v-model="options.lower_threshold" type="number" id="lowerThreshold"/>
         </div>
         <div>
           <label for="upperThreshold">Верхняя граница оператора Кэнни:</label>
-          <input type="range" id="upperThreshold" placeholder="100" />
+          <input @change="emit" v-model="options.upper_threshold" type="number" id="upperThreshold"/>
         </div>
         <div>
           <label for="sizeAccuracy">Масштаб:</label>
-          <input type="imput" id="sizeAccuracy" placeholder="19" />
+          <input @change="emit" v-model="options.size_accuracy" type="number" id="sizeAccuracy"/>
         </div>
       </div>
     </div>
@@ -58,6 +60,27 @@
 <script>
 export default {
   name: "AppOptions",
+  data() {
+    return {
+      options: {
+        show_size: true,
+        show_border: false,
+        show_contours: true,
+        particles_size_nm: 200,
+        gaussian_accuracy: 9,
+        lower_threshold: 50,
+        upper_threshold: 100,
+        size_accuracy: 19,
+        canny: false
+      },
+    }
+  },
+  methods: {
+    emit() {
+      this.$emit('optionChanged', this.options);
+    }
+  },
+  emits: ['optionChanged']
 };
 </script>
 
@@ -68,6 +91,7 @@ export default {
   width: 450px;
   border: 5px solid rgb(2, 2, 2);
   background: #f5f5dc;
+
   &__menu {
     display: grid;
     justify-content: center;
@@ -78,11 +102,13 @@ export default {
       grid-template-columns: repeat(2, minmax(100px, 170px));
       grid-template-rows: repeat(4, minmax(50px, auto));
       grid-row: 1;
+
       div {
         display: flex;
         grid-column: 1;
         justify-content: space-between;
       }
+
       &-item {
         font-size: 16px;
         font-family: "Heebo", sans-serif;
@@ -93,14 +119,17 @@ export default {
         justify-content: center;
       }
     }
-    &-range {
-      
+
+    &-numeric {
+
       div {
         margin-top: 20px;
         display: flex;
         grid-column: 1;
         justify-content: space-between;
+        align-items: center;
       }
+
       label {
         font-size: 16px;
         font-family: "Heebo", sans-serif;
@@ -117,6 +146,7 @@ export default {
       border: 2px solid rgb(36, 35, 35);
     }
   }
+
   h1 {
     font-size: 26px;
     grid-row: 1;
@@ -128,6 +158,7 @@ export default {
     text-align: center;
   }
 }
+
 .advertising {
   width: 450px;
   display: flex;

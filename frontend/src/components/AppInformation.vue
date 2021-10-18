@@ -2,18 +2,20 @@
   <div class="information">
     <div class="information__title">Информация</div>
     <ul class="information__list">
-      <li>Количество частиц: <strong>1231</strong></li>
-      <li>Максимальный размер: <strong>32</strong></li>
-      <li>Минимальный размер: <strong>12</strong></li>
-      <li>Средний размер: <strong>22</strong></li>
-      <li>Медианный размер: <strong>15</strong></li>
-      <li>Наиболее встречающийся размер: <strong>23</strong></li>
+      <li>Количество частиц: <strong>{{ info.amount }}</strong></li>
+      <li>Максимальный размер: <strong>{{ info.maxSize }}</strong></li>
+      <li>Минимальный размер: <strong>{{ info.minSize }}</strong></li>
+      <li>Средний размер: <strong>{{ info.mean }}</strong></li>
+      <li>Медианный размер: <strong>{{ info.median }}</strong></li>
     </ul>
   </div>
 </template>
 <script>
 export default {
   name: "AppInformation",
+  props: {
+    info: Object
+  }
 };
 </script>
 
@@ -26,7 +28,7 @@ export default {
   border-left: 0px;
   &__list {
     display: grid;
-    
+
     margin: 10px 20px 10px 20px;
     color: rgb(0, 0, 0);
     list-style-type: none;
@@ -35,8 +37,8 @@ export default {
     font-family: "Heebo", sans-serif;
     font-style: normal;
     line-height: 10px;
- 
-    
+
+
   }
   &__title {
     font-size: 26px;
