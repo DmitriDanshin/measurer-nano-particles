@@ -24,11 +24,9 @@ export default {
 
 #app {
   display: grid;
-  grid-template-columns: minmax(150px, 450px) minmax(150px, 750px) minmax(150px, auto);
-  grid-template-rows: repeat(3, minmax(220px, auto));
+  grid-template-columns: minmax(150px, 450px) minmax(150px, 750px) minmax(150px, 450px);
+  grid-template-rows: 1fr 1fr;
   height: 100vh;
-  background: #F5F5DC;
   background-color: #363535;
-
 }
 </style>

@@ -116,7 +116,6 @@
       </div>
     </div>
   </div>
-  <div class="advertising"></div>
 </template>
 
 <script>
@@ -151,7 +150,7 @@ export default {
   grid-column: 1;
   grid-row: 1 / 3;
   width: 450px;
-  border: 5px solid rgb(2, 2, 2);
+  border: 2px solid rgb(2, 2, 2);
   background: #f5f5dc;
 
   &__menu {
@@ -264,7 +263,7 @@ export default {
   font-size: 26px;
   grid-row: 3;
   justify-content: center;
-  border: 5px solid rgb(0, 0, 0);
+  border: 2px solid rgb(0, 0, 0);
   border-top: 0;
   align-items: center;
   background-image: url("../assets/brawl.jpg");

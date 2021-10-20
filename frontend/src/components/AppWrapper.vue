@@ -93,7 +93,7 @@ export default {
 .container {
   grid-column: 2;
   grid-row: 1/3;
-  border: 5px solid #000000;
+  border: 2px solid #000000;
   text-align: center;
 
   img {
@@ -110,11 +110,9 @@ export default {
   justify-content: center;
   grid-column: 2;
   grid-row: 3/4;
-  border: 5px solid #000000;
   border-top: 0;
   padding: 10px;
-  border-right: 5px solid rgb(0, 0, 0);
-  border-left: 5px solid rgb(0, 0, 0);
+
 
   &__name {
     font-size: 18px;

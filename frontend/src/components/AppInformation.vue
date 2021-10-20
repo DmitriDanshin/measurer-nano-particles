@@ -24,7 +24,7 @@ export default {
   grid-column: 3;
   grid-row: 1 / 3;
   background-color: #f5f5dc;
-  border: 5px solid rgb(0, 0, 0);
+  border: 2px solid rgb(0, 0, 0);
   border-left: 0;
   &__list {
     display: grid;
