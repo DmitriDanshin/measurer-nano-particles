@@ -1,12 +1,16 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import base64
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 import cv2
 
 from handler import handle_image
 from schemes import ImageData
+
 app = FastAPI()
 
 origins = ["*"]
@@ -18,6 +22,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.mount("/dist", StaticFiles(directory="dist/"), name="dist")
+app.mount("/css", StaticFiles(directory="dist/css"), name="css")
+app.mount("/img", StaticFiles(directory="dist/img"), name="img")
+app.mount("/js", StaticFiles(directory="dist/js"), name="js")
+templates = Jinja2Templates(directory="dist")
+
+
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/", response_model=ImageData)
