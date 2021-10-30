@@ -3,10 +3,11 @@ from handler import handle_image as handle
 from shutil import copyfileobj
 from schemas.image import ImageCreate
 from utils.to_base64 import to_base64
+from utils.from_base64 import from_base64
 from models.image import Image as ImageModel
 
 
-def create_image(db: Session, data: ImageCreate, img):
+def handle_file(db: Session, data: ImageCreate, img):
     with open("image.png", "wb") as buffer:
         copyfileobj(img.file, buffer)
         img_base64 = to_base64()
@@ -19,6 +20,15 @@ def create_image(db: Session, data: ImageCreate, img):
 
     image_data = handle(params=data)
     return image_data
+
+
+def handle_by_id(db: Session, image_id: int, data: ImageCreate):
+    img = db.query(ImageModel).filter(ImageModel.id == image_id).first()
+    if img:
+        from_base64(img)
+        return handle(params=data)
+    else:
+        return None
 
 
 def get_images(db: Session, skip: int = 0, limit: int = 100):
