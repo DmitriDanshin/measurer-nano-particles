@@ -15,6 +15,7 @@ class ImageCreate(BaseModel):
     size_accuracy: int = 19
     canny: bool = False
     handle: bool = True
+    save: bool = False
 
 
 class ImageStatistics(BaseModel):
@@ -28,3 +29,12 @@ class ImageStatistics(BaseModel):
 
 class ImageData(ImageStatistics):
     image: str = ""
+
+
+class UnhandledImage(BaseModel):
+    id: int
+    name: str = ""
+    img_base64: str = ""
+
+    class Config:
+        orm_mode = True

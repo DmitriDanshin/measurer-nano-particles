@@ -5,7 +5,7 @@ import cv2
 from scipy.spatial.distance import euclidean
 from imutils import perspective
 from imutils import contours as cnts
-from schemes import ImageCreate, ImageData
+from schemas.image import ImageCreate, ImageData
 from utils.get_statistics import get_statistics
 from utils.to_base64 import to_base64
 

@@ -1,7 +1,6 @@
 import math
 import statistics
-
-from schemes import ImageStatistics
+from schemas.image import ImageStatistics
 
 
 def get_statistics(sizes):
@@ -13,6 +12,5 @@ def get_statistics(sizes):
     amount = len(sizes)
     sizes.sort()
 
-    return ImageStatistics(amount=amount,
-                           maxSize=max_particle_size, minSize=min_particle_size,
+    return ImageStatistics(amount=amount, maxSize=max_particle_size, minSize=min_particle_size,
                            sizes=sizes, mean=mean, median=median)
