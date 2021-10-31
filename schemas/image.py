@@ -9,10 +9,12 @@ class ImageCreate(BaseModel):
     show_border: bool = False
     show_contours: bool = True
     particles_size_nm: int = 200
-    gaussian_accuracy: int = 11
+    gaussian_accuracy_width: int = 7
+    gaussian_accuracy_height: int = 7
     lower_threshold: int = 50
     upper_threshold: int = 100
-    size_accuracy: int = 19
+    size_accuracy: int = 10
+    show_midpoints: bool = True
     canny: bool = False
     handle: bool = True
     save: bool = False
