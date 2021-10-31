@@ -4,16 +4,7 @@ from schemas.image import ImageData, ImageCreate, UnhandledImage
 from fastapi import UploadFile, File, Depends
 from services import image as image_service
 from sqlalchemy.orm import Session
-from database import SessionLocal
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
+from database import get_db
 
 router = APIRouter(
     prefix='/images'
@@ -36,8 +27,8 @@ def delete_image(image_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/{id}", response_model=UnhandledImage, description=descriptions.get("get_by_id"))
-def read_image(image_id: int, db: Session = Depends(get_db)):
-    db_image = image_service.get_image(db, image_id=image_id)
+def read_image(image_id: int, db: Session = Depends(get_db), image_data: bool = True):
+    db_image = image_service.get_image(db, image_id=image_id, image_data=image_data)
     if db_image is None:
         raise HTTPException(status_code=404, detail="Image not found")
     return db_image
@@ -59,5 +50,5 @@ def handle_image(img: UploadFile = File(...),
 
 
 @router.get("/", response_model=List[UnhandledImage], description=descriptions.get("get_all"))
-def read_images(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return image_service.get_images(db, skip=skip, limit=limit)
+def read_images(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), image_data: bool = False):
+    return image_service.get_images(db, skip=skip, limit=limit, image_data=image_data)
