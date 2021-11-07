@@ -1,14 +1,26 @@
 <template>
-  <div class="information">
-    <div class="information__title">Информация</div>
-    <ul class="information__list">
-      <li>Количество частиц: <strong>{{ info.amount }}</strong></li>
-      <li>Максимальный размер: <strong>{{ info.maxSize }}</strong></li>
-      <li>Минимальный размер: <strong>{{ info.minSize }}</strong></li>
-      <li>Средний размер: <strong>{{ info.mean }}</strong></li>
-      <li>Медианный размер: <strong>{{ info.median }}</strong></li>
-    </ul>
+  <div class="information overflow-y-hidden">
+    <div
+        class="bg-gray-900 md:bg-gray-900 px-2 text-center bottom-0 md:pt-8 md:top-0 md:left-0 h-16 md:h-screen"
+    >
+      <div class="w-full md:relative mx-auto lg:float-right lg:px-6">
+        <ul class="list-reset flex flex-row md:flex-col text-center md:text-left mt-8">
+          <li class="block py-1 md:py-3 pl-1 align-middle text-white no-underline border-b-2 ">Количество частиц:
+            <strong>{{ info.amount }}</strong></li>
+          <li class="block py-1 md:py-3 pl-1 align-middle text-white no-underline border-b-2 ">Максимальный размер:
+            <strong>{{ info.maxSize }}</strong></li>
+          <li class="block py-1 md:py-3 pl-1 align-middle text-white no-underline border-b-2 ">Минимальный размер:
+            <strong>{{ info.minSize }}</strong></li>
+          <li class="block py-1 md:py-3 pl-1 align-middle text-white no-underline border-b-2 ">Средний размер: <strong>{{
+              info.mean
+            }}</strong></li>
+          <li class="block py-1 md:py-3 pl-1 align-middle text-white no-underline border-b-2 ">Медианный размер:
+            <strong>{{ info.median }}</strong></li>
+        </ul>
+      </div>
+    </div>
   </div>
+
 </template>
 <script>
 export default {
@@ -19,36 +31,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.information {
-  grid-column: 3;
-  grid-row: 1 / 3;
-  background-color: #f5f5dc;
-  border: 2px solid rgb(0, 0, 0);
-  border-left: 0;
-  &__list {
-    display: grid;
+<style scoped>
 
-    margin: 10px 20px 10px 20px;
-    color: rgb(0, 0, 0);
-    list-style-type: none;
-    gap: 30px;
-    font-size: 16px;
-    font-family: "Heebo", sans-serif;
-    font-style: normal;
-    line-height: 10px;
-
-
-  }
-  &__title {
-    font-size: 26px;
-    grid-row: 1;
-    font-family: "Heebo", sans-serif;
-    font-style: normal;
-    font-weight: bold;
-    line-height: 60px;
-    margin: 10px;
-    text-align: center;
-  }
-}
 </style>

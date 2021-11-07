@@ -1,31 +1,54 @@
 <template>
-  <div class="container">
-    <img
-        :src="src"
-        alt=""
-    />
-  </div>
-  <div class="footer">
-    <label class="footer__btn">
-      <input
-          id="input"
-          class="footer__btn-inputfile"
-          type="file"
-          @change="handleFileChange"
-      />
-      <p class="footer__btn-title">Добавить фотографию</p>
+  <nav
+      id="header"
+      class="bg-gray-900 w-full z-10 top-0 shadow absolute"
+  >
+    <div class="w-full container mx-auto flex flex-wrap items-center mt-0 pb-3 md:pb-0">
+      <div class="w-1/2 pl-2 md:pl-0"></div>
+      <div class="w-1/2 pr-0"></div>
+      <div
+          id="nav-content"
+          class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-900 z-20"
+      >
+        <ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
+          <li class="mr-6 my-2 md:my-0">
+            <a
+                href="#"
+                class="block py-1 md:py-3 pl-1 align-middle text-blue-400 no-underline hover:text-gray-100 border-b-2 border-blue-400 hover:border-blue-400"
+            >
+              <label for="input">Выбрать файл</label>
+              <input
+                  id="input"
+                  class="hidden"
+                  type="file"
+                  @change="handleFileChange"
+              />
+            </a>
+
+          </li>
+          <li class="mr-6 my-2 md:my-0">
+            <a
+                href="#"
+                class="block py-1 md:py-3 pl-1 align-middle text-blue-400 no-underline hover:text-gray-100 hover:border-blue-400"
+            >
+              История
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="flex justify-between bg-gray-800">
+    <app-options @optionChanged="handleOptionsChange"/>
+    <div class="px-auto pt-32  content-center">
       <img
-          class="footer__btn-icon"
-          src="../assets/fileinput.png"
-          alt=""
+          :src="src"
+          class="mx-auto w-2/3 h-2/3"
+          alt="nanoparticles"
       />
-    </label>
-    <!-- <div class="footer__name">
-      Вы используете фотографию :{{ amount?.slice(0, -4) }}
-    </div> -->
+    </div>
+    <app-information :info="info"/>
   </div>
-  <app-options @optionChanged="handleOptionsChange"/>
-  <app-information :info="info"/>
 </template>
 
 <script>
@@ -46,22 +69,24 @@ export default {
   methods: {
     handleOptionsChange(newOptions) {
       this.options = newOptions;
-      if (this.file) this.getData();
+      if (this.file) {
+        this.getData();
+      }
     },
     async process(request) {
-      let url = new URL('http://fastapi.space/');
+      const url = new URL('https://fastapi.space/images/');
 
       for (const option in request.options) {
         url.searchParams.set(option.replace(/[A-Z]/,
             match => `_${match.toLowerCase()}`), request.options[option]);
       }
 
-      let result = await fetch(url, {
+      const result = await fetch(url.toString(), {
         method: "POST",
         body: request.formData
       });
-      result = await result.json();
-      return result;
+
+      return await result.json();
     },
     handleFileChange(e) {
       this.file = e.target.files[0];
@@ -70,11 +95,13 @@ export default {
     },
     async getData() {
       const formData = new FormData();
-      formData.append('file', this.file);
-      let options = this.options;
-      let request = {formData, options};
-      let result = await this.process(request);
+      formData.append('img', this.file);
+      const options = this.options;
+      const request = {formData, options};
+      const result = await this.process(request);
+
       this.src = "data:image/png;base64, " + result.image;
+
       this.info = {
         amount: result.amount,
         maxSize: result.maxSize,
@@ -88,75 +115,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.container {
-  grid-column: 2;
-  grid-row: 1/3;
-  border: 2px solid #000000;
-  text-align: center;
 
-  img {
-    grid-row: 1 / 3;
-    grid-column: 2 / 3;
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  grid-column: 2;
-  grid-row: 3/4;
-  border-top: 0;
-  padding: 10px;
-
-
-  &__name {
-    font-size: 18px;
-    font-family: "Heebo", sans-serif;
-    color: #f5f5dc;
-    margin-top: 40px;
-  }
-
-  &__btn {
-    margin-top: 20px;
-
-    width: 200px;
-    height: 50px;
-    background-color: #f5f5dc;
-    display: flex;
-    cursor: pointer;
-    border-radius: 20px;
-    justify-content: space-around;
-    align-items: center;
-    border: 3px solid rgb(0, 0, 0);
-    padding: 5px;
-    transition: 0.8s;
-
-    &:hover {
-      color: #fff;
-      transition: 0.8s;
-      background-color: #a8a89a;
-    }
-
-    &-inputfile {
-      display: none;
-    }
-
-    &-title {
-      display: flex;
-      font-size: 14px;
-      font-family: "Heebo", sans-serif;
-      align-items: center;
-    }
-
-    &-icon {
-      width: 24px;
-      height: 24px;
-    }
-  }
-}
 </style>
