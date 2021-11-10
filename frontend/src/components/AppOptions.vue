@@ -113,7 +113,11 @@
             <input
                 id="lower_threshold"
                 v-model="options.lowerThreshold"
-                class="mt-1 border rounded-lg px-3 bg-black border-blue-800 placeholder-white-500 text-white block "
+                class="mt-1 block"
+                type="range"
+                min="0"
+                max="1000"
+                step="10"
                 @change="emit"
             />
           </li>
@@ -127,7 +131,11 @@
             <input
                 id="upper_threshold"
                 v-model="options.upperThreshold"
-                class="mt-1 border rounded-lg px-3 bg-black border-blue-800 placeholder-white-500 text-white block "
+                class="mt-1 block"
+                type="range"
+                min="0"
+                max="1000"
+                step="10"
                 @change="emit"
             />
           </li>
@@ -149,9 +157,9 @@
                 v-model="options.gaussianAccuracyWidth"
                 class="mt-1 block"
                 type="range"
-                min="1"
-                max="1001"
-                step="10"
+                min="3"
+                max="25"
+                step="2"
                 @change="emit"
             />
           </li>
@@ -173,9 +181,9 @@
                 v-model="options.gaussianAccuracyHeight"
                 class="mt-1 block"
                 type="range"
-                min="1"
-                max="1001"
-                step="10"
+                min="3"
+                max="25"
+                step="2"
                 @change="emit"
             />
           </li>
