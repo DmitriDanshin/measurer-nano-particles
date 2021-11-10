@@ -149,8 +149,8 @@
                 v-model="options.gaussianAccuracyWidth"
                 class="mt-1 block"
                 type="range"
-                min="0"
-                max="1000"
+                min="1"
+                max="1001"
                 step="10"
                 @change="emit"
             />
@@ -173,8 +173,8 @@
                 v-model="options.gaussianAccuracyHeight"
                 class="mt-1 block"
                 type="range"
-                min="0"
-                max="1000"
+                min="1"
+                max="1001"
                 step="10"
                 @change="emit"
             />
