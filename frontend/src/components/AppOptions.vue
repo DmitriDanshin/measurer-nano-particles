@@ -94,7 +94,7 @@
                 class="text-white no-underline block"
                 for="particles_size_nm"
             >
-              Размер частиц ( нм ):
+              Масштаб ( нм ):
             </label>
             <input
                 id="particles_size_nm"
@@ -149,9 +149,9 @@
                 v-model="options.gaussianAccuracyWidth"
                 class="mt-1 block"
                 type="range"
-                min="3"
-                max="25"
-                step="2"
+                min="0"
+                max="1000"
+                step="10"
                 @change="emit"
             />
           </li>
@@ -173,9 +173,9 @@
                 v-model="options.gaussianAccuracyHeight"
                 class="mt-1 block"
                 type="range"
-                min="3"
-                max="25"
-                step="2"
+                min="0"
+                max="1000"
+                step="10"
                 @change="emit"
             />
           </li>
@@ -184,7 +184,7 @@
                 class="text-white no-underline mt-2"
                 for="size_accuracy"
             >
-              Масштаб:
+              Точность учитывания размера:
             </label>
             <input
                 id="size_accuracy"
