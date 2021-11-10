@@ -1,4 +1,5 @@
 <template>
+
   <app-wrapper/>
 </template>
 
@@ -17,7 +18,9 @@ export default {
 </script>
 
 <style>
-
+body {
+  @apply bg-gray-800;
+}
 
 * {
   margin: 0;

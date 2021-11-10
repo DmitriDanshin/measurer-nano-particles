@@ -1,4 +1,5 @@
-<template>
+<template class>
+  <!-- В отдельный компонент -->
   <nav
       id="header"
       class="bg-gray-900 w-full z-10 top-0 shadow absolute"
@@ -14,7 +15,7 @@
           <li class="mr-6 my-2 md:my-0">
             <a
                 href="#"
-                class="block py-1 md:py-3 pl-1 align-middle text-blue-400 no-underline hover:text-gray-100 border-b-2 border-blue-400 hover:border-blue-400"
+                class="block py-1 md:py-3 pl-1 align-middle text-blue-400 no-underline"
             >
               <label for="input">Выбрать файл</label>
               <input
@@ -29,6 +30,14 @@
           <li class="mr-6 my-2 md:my-0">
             <a
                 href="#"
+                class="block py-1 md:py-3 pl-1 align-middle text-blue-400 no-underline hover:text-gray-100 border-b-2 border-blue-400 hover:border-blue-400"
+            >
+              Главная
+            </a>
+          </li>
+          <li class="mr-6 my-2 md:my-0">
+            <a
+                href="#"
                 class="block py-1 md:py-3 pl-1 align-middle text-blue-400 no-underline hover:text-gray-100 hover:border-blue-400"
             >
               История
@@ -38,17 +47,41 @@
       </div>
     </div>
   </nav>
-  <div class="flex justify-between bg-gray-800">
-    <app-options @optionChanged="handleOptionsChange"/>
-    <div class="px-auto pt-32  content-center">
-      <img
-          :src="src"
-          class="mx-auto w-2/3 h-2/3"
-          alt="nanoparticles"
-      />
+
+  <!-- В отдельный компонент / страницу -->
+  <section v-if=false class="py-8">
+    <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+      <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+        <img
+            class="hover:grow hover:shadow-lg cursor-pointer h-64"
+            src="https://picsum.photos/200/300?grayscale"
+            alt="img"
+        >
+      </div>
+      <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+        <img
+            class="hover:grow hover:shadow-lg cursor-pointer h-64"
+            src="https://picsum.photos/200/300?grayscale"
+            alt="img"
+        >
+      </div>
     </div>
-    <app-information :info="info"/>
-  </div>
+  </section>
+
+  <!-- В отдельный компонент / страницу -->
+  <section v-if="true">
+    <div class="flex justify-between bg-gray-800">
+      <app-options @optionChanged="handleOptionsChange"/>
+      <div class="px-auto pt-32  content-center">
+        <img
+            :src="src"
+            class="mx-auto w-2/3 h-2/3"
+            alt="nanoparticles"
+        />
+      </div>
+      <app-information :info="info"/>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -63,7 +96,8 @@ export default {
       file: '',
       src: require('../assets/placeholder.png'),
       options: {},
-      info: {}
+      info: {},
+      isHistory: false
     }
   },
   methods: {

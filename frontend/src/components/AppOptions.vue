@@ -144,13 +144,7 @@
                 class="text-white no-underline mt-2"
                 for="gaussian_accuracy_width"
             >
-              Точность фильтра Гаусса по ширине:
-            </label>
-            <label
-                class="text-white no-underline mt-2"
-                for="gaussian_accuracy_width"
-            >
-              {{ options.gaussianAccuracyWidth }}
+              Точность фильтра Гаусса по ширине: {{ options.gaussianAccuracyWidth }}
             </label>
             <input
                 id="gaussian_accuracy_width"
@@ -168,13 +162,7 @@
                 class="text-white no-underline mt-2"
                 for="gaussian_accuracy_height"
             >
-              Точность фильтра Гаусса по высоте:
-            </label>
-            <label
-                class="text-white no-underline mt-2"
-                for="gaussian_accuracy_height"
-            >
-              {{ options.gaussianAccuracyHeight }}
+              Точность фильтра Гаусса по высоте:  {{ options.gaussianAccuracyHeight }}
             </label>
             <input
                 id="gaussian_accuracy_height"
