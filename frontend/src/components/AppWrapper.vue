@@ -77,7 +77,7 @@ export default {
       const url = new URL('https://fastapi.space/images/');
 
       for (const option in request.options) {
-        url.searchParams.set(option.replace(/[A-Z]/,
+        url.searchParams.set(option.replace(/[A-Z]/g,
             match => `_${match.toLowerCase()}`), request.options[option]);
       }
 
