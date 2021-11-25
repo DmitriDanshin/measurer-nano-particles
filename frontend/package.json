@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.2",
+    "@vueform/slider": "^2.0.7",
     "autoprefixer": "^9",
     "core-js": "^3.6.5",
     "postcss": "^7",

@@ -106,81 +106,9 @@
           <li>
             <label
                 class="text-white no-underline mt-2"
-                for="lower_threshold"
-            >
-              Нижняя граница оператора Кэнни:
-            </label>
-            <input
-                id="lower_threshold"
-                v-model="options.lowerThreshold"
-                class="mt-1 block"
-                type="range"
-                min="0"
-                max="1000"
-                step="10"
-                @change="emit"
-            />
-          </li>
-          <li>
-            <label
-                class="text-white no-underline mt-2"
-                for="upper_threshold"
-            >
-              Верхняя граница оператора Кэнни:
-            </label>
-            <input
-                id="upper_threshold"
-                v-model="options.upperThreshold"
-                class="mt-1 block"
-                type="range"
-                min="0"
-                max="1000"
-                step="10"
-                @change="emit"
-            />
-          </li>
-          <li>
-            <label
-                class="text-white no-underline mt-2"
-                for="gaussian_accuracy_width"
-            >
-              Точность фильтра Гаусса по ширине: {{ options.gaussianAccuracyWidth }}
-            </label>
-            <input
-                id="gaussian_accuracy_width"
-                v-model="options.gaussianAccuracyWidth"
-                class="mt-1 block"
-                type="range"
-                min="3"
-                max="25"
-                step="2"
-                @change="emit"
-            />
-          </li>
-          <li>
-            <label
-                class="text-white no-underline mt-2"
-                for="gaussian_accuracy_height"
-            >
-              Точность фильтра Гаусса по высоте:  {{ options.gaussianAccuracyHeight }}
-            </label>
-            <input
-                id="gaussian_accuracy_height"
-                v-model="options.gaussianAccuracyHeight"
-                class="mt-1 block"
-                type="range"
-                min="3"
-                max="25"
-                step="2"
-                @change="emit"
-            />
-          </li>
-          <li>
-            <label
-                class="text-white no-underline mt-2"
                 for="size_accuracy"
             >
-              Точность учитывания размера:
+              До какого размера учитывать (нм):
             </label>
             <input
                 id="size_accuracy"
@@ -189,6 +117,75 @@
                 @change="emit"
             />
           </li>
+          <li>
+            <label
+                class="text-white no-underline mt-2"
+            >
+              Нижняя граница оператора Кэнни:
+            </label>
+            <div class="mt-4 w-3/4">
+              <Slider
+                  v-model="options.lowerThreshold"
+                  :min="0"
+                  :max="1000"
+                  :step="1"
+                  :showTooltip="'focus'"
+                  @change="emit"
+              />
+            </div>
+          </li>
+          <li>
+            <label
+                class="text-white no-underline mt-2"
+            >
+              Верхняя граница оператора Кэнни:
+            </label>
+            <div class="mt-4 w-3/4">
+              <Slider
+                  v-model="options.upperThreshold"
+                  :min="0"
+                  :max="1000"
+                  :step="1"
+                  :showTooltip="'focus'"
+                  @change="emit"
+              />
+            </div>
+          </li>
+          <li>
+            <label
+                class="text-white no-underline mt-2"
+            >
+              Точность фильтра Гаусса по ширине:
+            </label>
+            <div class="mt-4 w-3/4">
+              <Slider
+                  v-model="options.gaussianAccuracyWidth"
+                  :min="3"
+                  :max="25"
+                  :step="2"
+                  :showTooltip="'focus'"
+                  @change="emit"
+              />
+            </div>
+          </li>
+          <li>
+            <label
+                class="text-white no-underline"
+            >
+              Точность фильтра Гаусса по высоте:
+            </label>
+            <div class="mt-4 w-3/4">
+              <Slider
+                  v-model="options.gaussianAccuracyHeight"
+                  :min="3"
+                  :max="25"
+                  :step="2"
+                  :showTooltip="'focus'"
+                  @change="emit"
+              />
+            </div>
+          </li>
+
         </ul>
       </div>
     </div>
@@ -196,8 +193,13 @@
 </template>
 
 <script>
+import Slider from '@vueform/slider'
+
 export default {
   name: "AppOptions",
+  components: {
+    Slider,
+  },
   data() {
     return {
       options: {
@@ -212,7 +214,7 @@ export default {
         upperThreshold: 100,
         sizeAccuracy: 10,
         canny: false,
-      },
+      }
     };
   },
   methods: {
@@ -224,6 +226,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style src="../assets/slider.css"></style>
