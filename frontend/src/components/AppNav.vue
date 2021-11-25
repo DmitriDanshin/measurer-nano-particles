@@ -55,10 +55,16 @@ export default {
           isActive: true
         },
         {
+          name: "Распределение",
+          pageName: "AppChartDistribution",
+          isActive: false
+        },
+        {
           name: "История",
           pageName: "AppHistory",
           isActive: false
         },
+
       ]
     }
   },

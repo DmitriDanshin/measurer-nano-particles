@@ -16,10 +16,11 @@
 import AppHistory from "./AppHistory";
 import AppMain from "./AppMain";
 import AppNav from "./AppNav";
+import AppChartDistribution from "./AppChartDistribution";
 
 export default {
   name: "AppWrapper",
-  components: {AppNav, AppMain, AppHistory},
+  components: {AppNav, AppMain, AppHistory, AppChartDistribution},
   data() {
     return {
       currentPage: "AppMain",
