@@ -21,7 +21,7 @@ class ImageCreate(BaseModel):
 
 
 class ImageStatistics(BaseModel):
-    sizes: List[int] = []
+    sizes: List = []
     amount: int = 0
     maxSize: int = 0
     minSize: int = 0

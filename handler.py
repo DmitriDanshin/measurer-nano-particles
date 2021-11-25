@@ -26,8 +26,7 @@ def find_contours(edged, size_accuracy):
     contours = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contours = imutils.grab_contours(contours)
     (contours, _) = cnts.sort_contours(contours)
-    contours = [x for x in contours if cv2.contourArea(x) > size_accuracy]
-    return contours
+    return [cnt for cnt in contours if cv2.contourArea(cnt) > size_accuracy]
 
 
 def get_scale(ref_object, particles_size_nm):
@@ -71,7 +70,7 @@ def draw_midpoints(box, image):
 
 def draw_data(params, contours, image, scale):
     """ Рисование прямоугольников и надписей"""
-    sizes = []
+    sizes = np.array([], dtype=np.uint32)
 
     for cnt in contours:
         box = cv2.minAreaRect(cnt)
@@ -91,8 +90,8 @@ def draw_data(params, contours, image, scale):
         wid = euclidean(tl, tr) / scale
         ht = euclidean(tr, br) / scale
 
-        size = math.floor(math.sqrt(wid ** 2 + ht ** 2))
-        sizes.append(size)
+        size = math.floor(math.hypot(wid, ht))
+        sizes = np.append(sizes, size)
 
         if params.show_size:
             cv2.putText(image, "{:.1f}nm".format(wid), (int(mid_pt_horizontal[0] - 15), int(mid_pt_horizontal[1] - 10)),
@@ -100,7 +99,7 @@ def draw_data(params, contours, image, scale):
             cv2.putText(image, "{:.1f}nm".format(ht), (int(mid_pt_vertical[0] + 10), int(mid_pt_vertical[1])),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (155, 255, 0), 2)
 
-    return sizes, image
+    return sizes.tolist(), image
 
 
 def handle_image(path="image.png", params: ImageCreate = ImageCreate()):
@@ -126,7 +125,6 @@ def handle_image(path="image.png", params: ImageCreate = ImageCreate()):
 
     scale = get_scale(contours[0], params.particles_size_nm)
     sizes, image = draw_data(params, contours, image, scale)
-
     cv2.imwrite('image.png', image)
     image = to_base64()
 
