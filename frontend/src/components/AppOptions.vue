@@ -194,6 +194,7 @@
 
 <script>
 import Slider from '@vueform/slider'
+import interact from "interactjs";
 
 export default {
   name: "AppOptions",
@@ -223,6 +224,22 @@ export default {
     },
   },
   emits: ["option-changed"],
+  mounted() {
+    interact('.options')
+        .resizable({
+          edges: {right: true},
+          listeners: {
+            move: function (event) {
+              let {x} = event.target.dataset
+              x = (parseFloat(x) || 0) + event.deltaRect.left
+              Object.assign(event.target.style, {
+                width: `${event.rect.width}px`,
+              })
+              Object.assign(event.target.dataset, {x})
+            }
+          }
+        })
+  }
 };
 </script>
 

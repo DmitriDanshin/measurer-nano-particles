@@ -20,13 +20,30 @@
       </div>
     </div>
   </div>
-
 </template>
 <script>
+import interact from "interactjs";
+
 export default {
   name: "AppInformation",
   props: {
-    info: Object
+    info: Object,
+  },
+  mounted() {
+    interact('.information')
+        .resizable({
+          edges: {left: true},
+          listeners: {
+            move: function (event) {
+              let {x} = event.target.dataset
+              x = (parseFloat(x) || 0) + event.deltaRect.left
+              Object.assign(event.target.style, {
+                width: `${event.rect.width}px`,
+              })
+              Object.assign(event.target.dataset, {x})
+            }
+          }
+        })
   }
 };
 </script>
