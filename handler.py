@@ -8,6 +8,42 @@ from imutils import contours as cnts
 from schemas.image import ImageCreate, ImageData
 from utils.get_statistics import get_statistics
 from utils.to_base64 import to_base64
+from json import loads
+
+
+def draw_text(box, scale, image):
+    (tl, tr, br, bl) = box
+    mid_pt_horizontal = (tl[0] + int(abs(tr[0] - tl[0]) / 2), tl[1] + int(abs(tr[1] - tl[1]) / 2))
+    wid, ht = get_scaled_sizes(box, scale)
+
+    size = math.floor(math.hypot(wid, ht))
+
+    cv2.putText(image, "{:.1f}nm".format(size), (int(mid_pt_horizontal[0] - 15), int(mid_pt_horizontal[1] - 10)),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (155, 255, 0), 2)
+
+
+def get_scaled_sizes(box, scale):
+    (tl, tr, br, bl) = box
+
+    wid = euclidean(tl, tr) / scale
+    ht = euclidean(tr, br) / scale
+    return wid, ht
+
+
+def apply_user_contours(image, scale, params):
+    user_sizes = np.array([])
+    user_contours = loads(params.user_contours)
+    for cnt in user_contours:
+        box = np.array(cnt)
+        if params.show_contours:
+            cv2.drawContours(image, [box.astype("int")], -1, (0, 255, 255), 0)
+        if params.show_size:
+            draw_text(box, scale, image)
+
+        wid, ht = get_scaled_sizes(box, scale)
+        size = math.floor(math.hypot(wid, ht))
+        user_sizes = np.append(user_sizes, size)
+    return user_sizes
 
 
 def apply_canny(image, params):
@@ -70,36 +106,31 @@ def draw_midpoints(box, image):
 
 def draw_data(params, contours, image, scale):
     """ Рисование прямоугольников и надписей"""
-    sizes = np.array([], dtype=np.uint32)
+    sizes = np.array([])
 
     for cnt in contours:
         box = cv2.minAreaRect(cnt)
         box = cv2.boxPoints(box)
         box = np.array(box, dtype="int")
         box = perspective.order_points(box)
-        (tl, tr, br, bl) = box
 
-        if params.show_midpoints:
-            draw_midpoints(box, image)
-
+        # Отображение контуров
         if params.show_contours:
             cv2.drawContours(image, [box.astype("int")], -1, (0, 0, 255), 0)
 
-        mid_pt_horizontal = (tl[0] + int(abs(tr[0] - tl[0]) / 2), tl[1] + int(abs(tr[1] - tl[1]) / 2))
-        mid_pt_vertical = (tr[0] + int(abs(tr[0] - br[0]) / 2), tr[1] + int(abs(tr[1] - br[1]) / 2))
-        wid = euclidean(tl, tr) / scale
-        ht = euclidean(tr, br) / scale
+        # Отображение линий
+        if params.show_midpoints:
+            draw_midpoints(box, image)
+
+        wid, ht = get_scaled_sizes(box, scale)
 
         size = math.floor(math.hypot(wid, ht))
         sizes = np.append(sizes, size)
 
         if params.show_size:
-            cv2.putText(image, "{:.1f}nm".format(wid), (int(mid_pt_horizontal[0] - 15), int(mid_pt_horizontal[1] - 10)),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (155, 255, 0), 2)
-            cv2.putText(image, "{:.1f}nm".format(ht), (int(mid_pt_vertical[0] + 10), int(mid_pt_vertical[1])),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (155, 255, 0), 2)
+            draw_text(box, scale, image)
 
-    return sizes.tolist(), image
+    return sizes, image
 
 
 def handle_image(path="image.png", params: ImageCreate = ImageCreate()):
@@ -119,12 +150,16 @@ def handle_image(path="image.png", params: ImageCreate = ImageCreate()):
 
     contours = find_contours(edged, params.size_accuracy)
 
+    scale = get_scale(contours[0], params.particles_size_nm)
+    user_sizes = apply_user_contours(image, scale, params)
+    sizes, image = draw_data(params, contours, image, scale)
+
     # Отображение границ на фото
     if params.show_border:
         cv2.drawContours(image, contours, -1, (0, 255, 0), 3)
 
-    scale = get_scale(contours[0], params.particles_size_nm)
-    sizes, image = draw_data(params, contours, image, scale)
+    sizes = np.concatenate((sizes, user_sizes))
+    sizes = sizes.tolist()
     cv2.imwrite('image.png', image)
     image = to_base64()
 

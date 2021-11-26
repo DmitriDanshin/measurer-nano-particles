@@ -15,6 +15,8 @@ class ImageCreate(BaseModel):
     upper_threshold: int = 100
     size_accuracy: int = 10
     show_midpoints: bool = True
+    user_contours: str = "[[[123, 10], [11, 54], [257, 1534], [125, 1535]]," \
+                         " [[123, 43], [11, 43], [257, 43], [125, 1535]]]"
     canny: bool = False
     handle: bool = True
     save: bool = False
