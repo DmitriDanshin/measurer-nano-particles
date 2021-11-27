@@ -33,11 +33,11 @@ def get_scaled_sizes(box, scale):
 def apply_user_contours(image, scale, params):
     user_sizes = np.array([])
     user_box_contours = []
-    user_contours = loads(params.user_contours)
-    excluded_contours = loads(params.excluded_contours)
+    user_contours = loads(params.user_contours[0])
+    excluded_contours = loads(params.excluded_contours[0])
+
     for cnt in user_contours:
         box = np.array(cnt)
-
         # Удалить ненужный контур
         if box.tolist() in excluded_contours:
             continue
@@ -117,7 +117,7 @@ def draw_data(params, contours, image, scale):
     """ Рисование прямоугольников и надписей"""
     sizes = np.array([])
     box_contours = []
-    excluded_contours = loads(params.excluded_contours)
+    excluded_contours = loads(params.excluded_contours[0])
     for cnt in contours:
         box = cv2.minAreaRect(cnt)
         box = cv2.boxPoints(box)
