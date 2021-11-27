@@ -17,6 +17,8 @@ class ImageCreate(BaseModel):
     show_midpoints: bool = True
     user_contours: str = "[[[123, 10], [11, 54], [257, 1534], [125, 1535]]," \
                          " [[123, 43], [11, 43], [257, 43], [125, 1535]]]"
+    excluded_contours: str = "[[[125, 10], [11, 54], [257, 1534], [125, 1535]]," \
+                             "[[123, 43], [11, 43], [257, 43], [125, 1535]]]"
     canny: bool = False
     handle: bool = True
     save: bool = False
@@ -29,6 +31,7 @@ class ImageStatistics(BaseModel):
     minSize: int = 0
     mean: float = 0
     median: int = 0
+    contours: list = []
 
 
 class ImageData(ImageStatistics):

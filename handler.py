@@ -5,6 +5,7 @@ import cv2
 from scipy.spatial.distance import euclidean
 from imutils import perspective
 from imutils import contours as cnts
+from assets.colors import LIME, CYAN, YELLOW, RED, BLUE, MAGENTA
 from schemas.image import ImageCreate, ImageData
 from utils.get_statistics import get_statistics
 from utils.to_base64 import to_base64
@@ -19,12 +20,11 @@ def draw_text(box, scale, image):
     size = math.floor(math.hypot(wid, ht))
 
     cv2.putText(image, "{:.1f}nm".format(size), (int(mid_pt_horizontal[0] - 15), int(mid_pt_horizontal[1] - 10)),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (155, 255, 0), 2)
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, CYAN, 2)
 
 
 def get_scaled_sizes(box, scale):
     (tl, tr, br, bl) = box
-
     wid = euclidean(tl, tr) / scale
     ht = euclidean(tr, br) / scale
     return wid, ht
@@ -32,18 +32,27 @@ def get_scaled_sizes(box, scale):
 
 def apply_user_contours(image, scale, params):
     user_sizes = np.array([])
+    user_box_contours = []
     user_contours = loads(params.user_contours)
+    excluded_contours = loads(params.excluded_contours)
     for cnt in user_contours:
         box = np.array(cnt)
+
+        # Удалить ненужный контур
+        if box.tolist() in excluded_contours:
+            continue
+
+        user_box_contours.append(box.tolist())
         if params.show_contours:
-            cv2.drawContours(image, [box.astype("int")], -1, (0, 255, 255), 0)
+            cv2.drawContours(image, [box.astype("int")], -1, YELLOW, 0)
         if params.show_size:
             draw_text(box, scale, image)
-
+        if params.show_midpoints:
+            draw_midpoints(box, image)
         wid, ht = get_scaled_sizes(box, scale)
         size = math.floor(math.hypot(wid, ht))
         user_sizes = np.append(user_sizes, size)
-    return user_sizes
+    return user_sizes, user_box_contours
 
 
 def apply_canny(image, params):
@@ -93,30 +102,35 @@ def draw_midpoints(box, image):
     (tlblX, tlblY) = midpoint(tl, bl)
     (trbrX, trbrY) = midpoint(tr, br)
 
-    cv2.circle(image, (int(tltrX), int(tltrY)), 5, (255, 0, 0), -1)
-    cv2.circle(image, (int(blbrX), int(blbrY)), 5, (255, 0, 0), -1)
-    cv2.circle(image, (int(tlblX), int(tlblY)), 5, (255, 0, 0), -1)
-    cv2.circle(image, (int(trbrX), int(trbrY)), 5, (255, 0, 0), -1)
+    cv2.circle(image, (int(tltrX), int(tltrY)), 5, BLUE, -1)
+    cv2.circle(image, (int(blbrX), int(blbrY)), 5, BLUE, -1)
+    cv2.circle(image, (int(tlblX), int(tlblY)), 5, BLUE, -1)
+    cv2.circle(image, (int(trbrX), int(trbrY)), 5, BLUE, -1)
 
     cv2.line(image, (int(tltrX), int(tltrY)), (int(blbrX), int(blbrY)),
-             (255, 0, 255), 2)
+             MAGENTA, 2)
     cv2.line(image, (int(tlblX), int(tlblY)), (int(trbrX), int(trbrY)),
-             (255, 0, 255), 2)
+             MAGENTA, 2)
 
 
 def draw_data(params, contours, image, scale):
     """ Рисование прямоугольников и надписей"""
     sizes = np.array([])
-
+    box_contours = []
+    excluded_contours = loads(params.excluded_contours)
     for cnt in contours:
         box = cv2.minAreaRect(cnt)
         box = cv2.boxPoints(box)
         box = np.array(box, dtype="int")
         box = perspective.order_points(box)
+        box_contours.append(box.tolist())
+
+        if box.tolist() in excluded_contours:
+            continue
 
         # Отображение контуров
         if params.show_contours:
-            cv2.drawContours(image, [box.astype("int")], -1, (0, 0, 255), 0)
+            cv2.drawContours(image, [box.astype("int")], -1, RED, 0)
 
         # Отображение линий
         if params.show_midpoints:
@@ -130,7 +144,7 @@ def draw_data(params, contours, image, scale):
         if params.show_size:
             draw_text(box, scale, image)
 
-    return sizes, image
+    return sizes, box_contours, image
 
 
 def handle_image(path="image.png", params: ImageCreate = ImageCreate()):
@@ -151,16 +165,18 @@ def handle_image(path="image.png", params: ImageCreate = ImageCreate()):
     contours = find_contours(edged, params.size_accuracy)
 
     scale = get_scale(contours[0], params.particles_size_nm)
-    user_sizes = apply_user_contours(image, scale, params)
-    sizes, image = draw_data(params, contours, image, scale)
+    user_sizes, user_box_contours = apply_user_contours(image, scale, params)
+    sizes, box_contours, image = draw_data(params, contours, image, scale)
+
+    box_contours = box_contours + user_box_contours
 
     # Отображение границ на фото
     if params.show_border:
-        cv2.drawContours(image, contours, -1, (0, 255, 0), 3)
+        cv2.drawContours(image, contours, -1, LIME, 3)
 
     sizes = np.concatenate((sizes, user_sizes))
     sizes = sizes.tolist()
     cv2.imwrite('image.png', image)
     image = to_base64()
 
-    return ImageData(image=image, **get_statistics(sizes).dict())
+    return ImageData(image=image, **get_statistics(sizes, box_contours).dict())
