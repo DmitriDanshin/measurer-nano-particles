@@ -2,7 +2,11 @@
   <section v-if="true">
     <div class="flex justify-between bg-gray-800">
       <app-options @optionChanged="handleOptionsChange"/>
-      <app-image :src="src"/>
+      <app-image
+          :src="src"
+          :contours="info.contours"
+          @userContoursDrawn="handleNewUserContours"
+      />
       <app-information :info="info"/>
     </div>
   </section>
@@ -19,6 +23,9 @@ export default {
   methods: {
     handleOptionsChange(options) {
       this.$emit('handle-options-change', options);
+    },
+    handleNewUserContours(userContours) {
+      this.$emit("handle-new-user-contours", userContours);
     }
   },
   props: {

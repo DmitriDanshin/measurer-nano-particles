@@ -8,6 +8,7 @@
       :src="src"
       :info="info"
       @handle-options-change="handleOptionsChange"
+      @handle-new-user-contours="handleNewUserContours"
   />
 </template>
 
@@ -27,6 +28,8 @@ export default {
       file: '',
       src: require('../assets/placeholder.png'),
       options: {},
+      userContours: '[]',
+      excludedContours: '[]',
       info: {},
       isHistory: false
     }
@@ -48,6 +51,10 @@ export default {
       });
       return await result.json();
     },
+    handleNewUserContours(newContours) {
+      this.userContours = newContours
+      this.getData()
+    },
     handleFileChange(e) {
       this.file = e.target.files[0];
       this.src = URL.createObjectURL(this.file);
@@ -62,7 +69,10 @@ export default {
     async getData() {
       const formData = new FormData();
       formData.append('img', this.file);
+      formData.append('user_contours', this.userContours);
+      formData.append('excluded_contours', "[]");
       const options = this.options;
+      console.log(this.userContours)
       const request = {formData, options};
       const result = await this.process(request);
 
@@ -74,8 +84,10 @@ export default {
         minSize: result.minSize,
         sizes: result.sizes,
         mean: result.mean,
-        median: result.median
+        median: result.median,
+        contours: result.contours,
       }
+      console.log(result.contours)
     }
   }
 };
