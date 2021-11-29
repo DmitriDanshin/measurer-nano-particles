@@ -8,7 +8,7 @@
       :src="src"
       :info="info"
       @handle-options-change="handleOptionsChange"
-      @handle-new-user-contours="handleNewUserContours"
+      @new-contour-settings="handleNewContourSettings"
   />
 </template>
 
@@ -51,8 +51,9 @@ export default {
       });
       return await result.json();
     },
-    handleNewUserContours(newContours) {
-      this.userContours = newContours
+    handleNewContourSettings(contours) {
+      this.userContours = contours.userContours
+      this.excludedContours = contours.excludedContours
       this.getData()
     },
     handleFileChange(e) {
@@ -70,9 +71,8 @@ export default {
       const formData = new FormData();
       formData.append('img', this.file);
       formData.append('user_contours', this.userContours);
-      formData.append('excluded_contours', "[]");
+      formData.append('excluded_contours', this.excludedContours);
       const options = this.options;
-      console.log(this.userContours)
       const request = {formData, options};
       const result = await this.process(request);
 

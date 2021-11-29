@@ -14,6 +14,7 @@
     "chart.js": "^3.6.0",
     "core-js": "^3.6.5",
     "interactjs": "^1.10.11",
+    "point-in-polygon": "^1.1.0",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
     "vue": "^3.0.0",
