@@ -3,13 +3,15 @@
       @change-page="changePage"
       @handle-file-change="handleFileChange"
   />
-  <component
-      :is="currentPage"
-      :src="src"
-      :info="info"
-      @handle-options-change="handleOptionsChange"
-      @new-contour-settings="handleNewContourSettings"
-  />
+  <keep-alive>
+    <component
+        :is="currentPage"
+        :src="src"
+        :info="info"
+        @handle-options-change="handleOptionsChange"
+        @new-contour-settings="handleNewContourSettings"
+    />
+  </keep-alive>
 </template>
 
 <script>
